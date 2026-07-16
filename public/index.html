@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <meta name="description" content="コンピューター部活動あり？">
     <title>本日コン部</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="fdb.js"></script>
+
 </head>
 <style>
     * {
@@ -14,14 +16,16 @@
 
     body {
         margin: 0;
-        padding:0;
+        padding: 0;
         font-family: Noto Sans JP, ヒラギノ角ゴ Pro, sans-serif;
-        background-color: red;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
         height: 100svh;
+        cursor: default;
+        -webkit-user-select: none;
+        user-select: none;
     }
 
     .ctner {
@@ -36,18 +40,126 @@
         align-items: center;
         overflow: hidden;
         border-radius: 10px;
+
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        /* Safari対策 */
+
+        /* 3. ガラスの「エッジ」を光らせるための細い線 */
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        /* 4. 角丸にすると一気に今風に */
+        border-radius: 16px;
+
+        /* 5. 柔らかい影をつけて浮かび上がらせる */
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+
+
+    }
+
+    .p32 {
+        width: 100%;
+        height: 70%;
+        background: #353ff2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .p31 {
+        width: 100%;
+        height: 30%;
+        background: rgb(255, 238, 211);
+        display: flex;
+        flex-direction: column;
+    }
+
+    #nextday {
+        padding: 5px;
+        border-radius: 8px;
+        border: solid 2px #444;
+        height: 80%;
+        margin: 10px;
+        background: rgb(255, 243, 223);
+    }
+
+    .prints {
+        padding: 5px;
+        border-radius: 8px;
+        border: solid 2px #444;
+        height: 20%;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        background: rgb(255, 243, 223);
+        width: fit-content;
+        color: #333;
+        margin-left: auto;
+        float: right;
+    }
+
+    .ra::after {
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
+        display: flex;
+        content: ">";
+        align-items: center;
+        justify-content: center;
+        border: solid 2px #555;
+        color: #555;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+    }
+
+    .ra {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        flex-direction: row-reverse;
+        width: fit-content;
+        margin-right: auto;
+        color: #555;
+        font-weight: bold;
+
+    }
+
+    .flg-td {
+        font-family: ヒラギノ角ゴ Stdn, Noto Sans JP ExtraBold, Noto Sans JP, sans-serif;
+        writing-mode: vertical-lr;
+        white-space: pre-wrap;
+        font-size: 9svh;
+        line-height: 12svh;
+        color: rgba(255, 255, 255, 0.042);
+        /* 2. 1pxの白い輪郭線を引く（これが光るエッジになる！） */
+        -webkit-text-stroke: 1px rgba(174, 205, 255, 0.517);
+        /* 3. エッジの裏側にわずかに暗い影を落として、立体感を補強 */
+        text-shadow: 2px 2px 4px rgba(125, 131, 160, 0.25);
+        font-weight: 900;
+        will-change: transform;
+        transition: transform 0.3s ease;
     }
 </style>
-
+<style>
+    * {
+        transition: transform 0.4s ease-out, opacity 0.15s ease-out;
+    }
+    /* アニメーション中に表示がバグるのを防ぐお守り */
+    .pressing {
+        will-change: transform, opacity;
+    }
+</style>
 <body>
     <div class="ctner">
-        <div class="3-2">
-            <div>
-                <img src="honjitsu.png" alt="本日コン部" style="width: 100%;">
-            </div>
+        <div class="p32">
+            <div class="flg-td">本日コン部、<br> 活動あり</div>
         </div>
-        <div class="3-1">
-
+        <div class="p31">
+            <div id="nextday">
+                <div class="ra">明日のコン部</div>
+            </div>
+            <a class="prints"
+                href="https://2602-fd6f-1d-40e-4c5-ef7-6d7-21e.v6.haruharutvusercontent.com/SYa3hBafDwwCoAw2jETTWCnP">配布プリント</a>
         </div>
     </div>
 </body>
