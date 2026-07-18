@@ -49,7 +49,7 @@
     .p32 {
         width: 100%;
         height: 70%;
-        background: #353ff2;
+    
         display: flex;
         justify-content: center;
         align-items: center;
@@ -130,29 +130,99 @@
         will-change: transform;
         transition: transform 0.3s ease;
     }
+    #d-t{
+        font-size: 1.3rem;
+        font-weight: bold;
+        color:#444;
+    }
 </style>
 <style>
     * {
         transition: transform 0.4s ease-out, opacity 0.15s ease-out;
     }
+
     /* アニメーション中に表示がバグるのを防ぐお守り */
     .pressing {
         will-change: transform, opacity;
     }
 </style>
+
 <body>
     <div class="ctner">
-        <div class="p32">
-            <div class="flg-td">本日コン部、<br> 活動あり</div>
+        <div class="p32" id="t">
+            <div class="flg-td" id="today">本日コン部、</div>
         </div>
         <div class="p31">
             <div id="nextday">
-                <div class="ra">明日のコン部</div>
+                <div class="ra">くわしく/明日のコン部</div>
+                <div id="d-t"></div>
             </div>
             <a class="prints"
-                href="https://2602-fd6f-1d-40e-4c5-ef7-6d7-21e.v6.haruharutvusercontent.example.com/SYa3hBafDwwCoAw2jETTWCnP">配布プリント</a>
+                href="https://library.matsudo-h.com/e-book/mtdc/">配布プリント</a>
         </div>
     </div>
+    <script>
+        const today = document.getElementById("today");
+        const d_t = document.getElementById("d-t");
+        const nextday = document.getElementById("nextday");
+        const todayc = document.getElementById("t");
+        document.addEventListener("DOMContentLoaded", async () => {
+            const todayDate = new Date();
+            const yyyy = todayDate.getFullYear();
+            const mm = String(todayDate.getMonth() + 1).padStart(2, "0");
+            const yyyymm = yyyy + "-" + mm;
+            fetch(yyyymm + ".tsv").then(response => response.text()).then(text => {
+                const lines = text.split("\n");
+                const todayDay = todayDate.getDate();
+                const tomorrowDate = new Date(todayDate);
+                tomorrowDate.setDate(todayDay + 1);
+                const tomorrowDay = tomorrowDate.getDate();
+                let todayActivity = "";
+                let tomorrowActivity = "";
+                let todayRemarks = "";
+                for (const line of lines) {
+                    const [day, , activity, remarks] = line.split("\t");
+                    if (parseInt(day) === todayDay) {
+                        todayActivity = activity;
+                        todayRemarks = remarks;
+                    }
+                    if (parseInt(day) === tomorrowDay) {
+                        tomorrowActivity = activity;
+                        if (remarks) {
+                            tomorrowActivity += "  " + remarks;
+                        }
+                    }
+                }
+                if (todayActivity.includes("〇")) {
+                    today.innerHTML = "本日コン部、<br>    活動あり";
+                    todayc.style.background = "#353ff2";
+                } else {
+                    today.innerHTML = "本日コン部、<br>    活動なし";
+                    todayc.style.background = "";
+                }
+                var ampmflag;
+                if(todayActivity.includes("(午後)")){
+                    ampmflag = "午後(13:00~15:00)";
+                } else if(todayActivity.includes("(午前)")){
+                    ampmflag = "午前(09:30~11:30)";
+                } else if(todayActivity.includes("(午前,午後)")){
+                    ampmflag = "午前(09:30~11:30)、午後(13:00~15:00)";
+                } else {
+                    ampmflag = "";
+                }
+                var tmampflag;
+                if(tomorrowActivity.includes("(午後)")){
+                    tmampflag = "活動あり、午後(13:00~15:00)";
+                } else if(tomorrowActivity.includes("(午前)")){
+                    tmampflag = "活動あり、午前(09:30~11:30)";
+                } else if(tomorrowActivity.includes("(午前,午後)")){
+                    tmampflag = "活動あり、午前(09:30~11:30)、午後(13:00~15:00)";
+                }
+                d_t.innerText =  ampmflag !== "" ? "本日の活動は、" + ampmflag + "から！ " + todayRemarks + "\n 明日はコン部は、" + (tmampflag || "活動なし") : todayRemarks + "  明日はコン部は" + (tmampflag || "活動なし");
+            });
+        });
+
+    </script>
 </body>
 
 </html>
